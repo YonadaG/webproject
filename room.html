@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="room.css">
+    <link rel="stylesheet" href="home.css">
+    
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title> room</title>
+</head>
+
+<body>
+<div>
+     <nav class="navbar">
+            <a href="#" class="navbar-brand">luxury hotel</a>
+
+            <div class="nav-links-desktop">
+                <a href="home.html#Home">Home</a>
+                <a href="home.html#About">About Us</a>
+                <a href=" home.html#Booking">rooms</a>
+                <a href=" home.html#Explore">Explore</a>
+                <a href="#">Contact Us</a>
+            </div>
+
+            <a href="#" class="login-button-desktop">Login</a>
+
+            <div class="nav-menu-toggle" id="navMenuToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+
+            <div class="nav-wrapper" id="navWrapper">
+                <div class="nav-links"> <a href="#">Home</a>
+                    <a href="#">About Us</a>
+                    <a href="#Booking">Booking</a>
+                    <a href="#Explore">Explore</a>
+                    <a href="#">Contact Us</a>
+                </div>
+                <!-- <a href="#" class="login-button">Login</a> </div> -->
+
+        </nav>
+    </div>
+    <div class="header">
+ <h2> Rooms</h2>
+    </div>
+    <div id="#room" class="rooms">
+       <div class="room-card"style=" width:400px;" 
+   data-room-name="Standard Single Room"
+     data-room-type="Standard"
+     data-room-price="500"
+     data-room-available="25"
+     data-room-image="./img/double.png">
+  <img src="./img/double.png" alt="Luxury Hotel Double Room" class="room-card-image">
+  <span class="room-type-tag">  standard single</span>
+  
+ </div>
+  <br/> 
+    <div class="room-card"style=" width:400px;" 
+  data-room-name="Deluxe Single Room"
+     data-room-type="Standard"
+     data-room-price="500"
+     data-room-available="25"
+     data-room-image="./img/double.png">
+  <img src="./img/double.png" alt="Luxury Hotel Double Room" class="room-card-image">
+  <span class="room-type-tag"> Deluxe single</span>
+  
+ </div>
+ <br/> 
+    <div class="room-card"style=" width:400px;" 
+ data-room-name="Deluxe Double Room"
+     data-room-type="Double"
+     data-room-price="850"
+     data-room-available="15"
+     data-room-image="./img/double.png">
+  <img src="./img/double.png" alt="Luxury Hotel Double Room" class="room-card-image">
+  <span class="room-type-tag"> Standard Double</span>
+  
+ </div>
+ <br/> 
+    <div class="room-card"style=" width:400px;" 
+ data-room-name="Deluxe Double Room"
+     data-room-type=" Deluxe Double"
+     data-room-price="850"
+     data-room-available="15"
+     data-room-image="./img/double.png">
+  <img src="./img/double.png" alt="Luxury Hotel Double Room" class="room-card-image">
+  <span class="room-type-tag">Deluxe Double</span>
+  
+ </div>
+ <br/> 
+    <div class="room-card"style=" width:400px;" 
+  data-room-name="King Deluxe Room"
+     data-room-type="King Deluxe"
+     data-room-price="1000"
+     data-room-available="25"
+     data-room-image="./img/double.png">
+  <img src="./img/double.png" alt="Luxury Hotel Double Room" class="room-card-image">
+  <span class="room-type-tag">King Deluxe</span>
+  
+ </div>
+ <br/> 
+    <div class="room-card"style=" width:400px;" 
+    data-room-name=" King premium Room"
+     data-room-type=" King premium"
+     data-room-price="1000"
+     data-room-available="25"
+     data-room-image="./img/double.png">
+  <img src="./img/double.png" alt="Luxury Hotel Double Room" class="room-card-image">
+  <span class="room-type-tag"> King premium</span>
+  
+ </div>
+ <br/> 
+
+ <div class="room-modal-overlay" id="roomModalOverlay">
+  <div class="room-modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modalRoomName">Room Name Placeholder</h3> <span class="modal-close" id="modalClose">&times;</span>
+    </div>
+
+    <div class="modal-image-container">
+      <img src="" alt="Room Image" class="modal-image" id="modalRoomImage"> </div>
+
+    <div class="modal-details">
+      <p>Type: <span class="detail-value" id="modalRoomType"></span></p> <p>price: <span class="detail-value" id="modalRoomPrice"></span></p> <p>Available Room: <span class="detail-value" id="modalRoomAvailable"></span></p> </div>
+
+    <div class="modal-booking-options">
+      <!-- <div class="date-picker-modal">
+        <select id="modal-check-in" name="modal-check-in-date">
+          <input id=" dates" type="date"></input>
+        < <span class="dropdown-arrow"></span> -->
+         <!-- </select> -->
+      <!-- </div>  -->
+      <!-- <div class="date-picker-modal">
+        <select id="modal-check-out" name="modal-check-out-date">
+         <input type="date"></input> -->
+        <!-- <span class="dropdown-arrow"></span> -->
+      <!-- </div> -->
+      <button id="bookNowBtn" class="book-now-button">Book Now</button>
+    </div>
+  </div>
+ </div>
+ </div> 
+
+ 
+  <div id="modalOverlay" class="modal-overlay">
+        <div class="info-panel-container" id="infoPanel">
+            <button class="close-button" id="closeModalBtn">&times;</button> 
+            <h2 class="panel-header">Booking Information</h2>
+
+            <form id="bookingForm">
+                <div class="info-item">
+                    <label for="name" class="info-label">Name</label>
+                    <input type="text" id="name" name="name" class="info-input" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="info-item">
+                    <label for="email" class="info-label">Email</label>
+                    <input type="email" id="email" name="email" class="info-input" placeholder="Enter your email address" required>
+                </div>
+
+                <div class="info-item">
+                    <label for="phone" class="info-label">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" class="info-input" placeholder="e.g., +251 966 222299" required>
+                </div>
+
+                <div class="info-item">
+                    <label for="passport" class="info-label">Passport Number</label>
+                    <input type="text" id="passport" name="passport" class="info-input" placeholder="Enter your passport number" required>
+                </div>
+
+                <div class="info-item">
+                    <label for="address" class="info-label">Address</label>
+                    <input type="text" id="address" name="address" class="info-input" placeholder="Enter your full address" required>
+                </div>
+
+                <div class="info-item">
+                    <label for="roomType" class="info-label">Room Type</label>
+              
+                    <select id="roomType " class="info-select" placeholder=" room-type" >
+                      <option value="standard single"> standard single</option>
+                      <option value=" Deluxe single"> Deluxe single</option>
+                      <option value=" Standard double">Standard double</option>
+                      <option value="Deluxe double">Deluxe double</option>
+                      <option value="King Deluxe "> king Deluxe</option>
+                      <option value="King Deluxe "> king premuim</option>
+                    </select>
+                </div>
+                <br/>
+                <div class=" check-in-out">
+
+                <input id="check-in" type="date" class="info-input"></input>
+                <input id="check-out" type="date" class="info-input"></input>
+
+                </div>
+               
+
+                <button type="submit" class="submit-button">Submit Booking</button>
+            </form>
+        </div>
+    </div>
+ 
+
+
+    
+
+        
+
+</div>
+        <script src="main.js">   
+        </script>
+</body>
+</html>

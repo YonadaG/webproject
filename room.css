@@ -1,0 +1,258 @@
+.navbar{
+    left: 0;
+    margin-right: 5%;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.booking-card {
+  margin: 0 auto;
+  margin-top: 50px;
+  margin-bottom: 50px;
+
+  width: 500px;
+  height: 120px;
+  max-width: 90%;
+
+  background-color: #8B4513;
+  border-radius: 5px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  z-index: 5;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 15px 30px;
+}
+.header{
+      font-family: 'Georgia', serif;
+  font-size: 2.2em;
+  color: #333;
+  margin-bottom: 10px;
+  line-height: 1.2;
+  margin-left:  20%;
+}
+.rooms{
+
+     display: grid;
+  grid-template-columns: repeat(4, 4fr);
+  gap: 30px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.book-now-button {
+            background-color: #8B4513;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+        .book-now-button:hover {
+            background-color: #A0522D; 
+        }
+
+        /* Modal Overlay Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Faded black background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Ensure it's on top of other content */
+            opacity: 0; /* Hidden by default */
+            visibility: hidden; /* Hidden by default */
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Information Panel Styles (Modal Content) */
+        .info-panel-container {
+            max-width: 600px; /* Max width for the panel */
+            width: 90%; /* Responsive width */
+            background-color: white;
+            border-radius: 0.75rem; /* More rounded corners */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Stronger shadow for modal */
+            padding: 2rem;
+            box-sizing: border-box; /* Include padding in width calculation */
+            transform: translateY(-20px); /* Start slightly above for animation */
+            opacity: 0; /* Hidden by default */
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            position: relative; 
+        }
+        .modal-overlay.active .info-panel-container {
+            transform: translateY(0); /* Slide into view */
+            opacity: 1;
+        }
+
+        .panel-header {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 700; /* font-bold */
+            color: #333;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+        ;
+
+        }
+        .info-item:last-of-type { /* Target the last info-item, not the submit button */
+            margin-bottom: 0;
+        }
+        .info-label {
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 600; /* font-semibold */
+            color: #555;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase; /* Uppercase labels */
+        }
+        .info-input { 
+            font-size: 1.125rem; 
+            color: #333;
+            padding: 0.75rem 1rem;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd; 
+            border-radius: 0.375rem; 
+            width: 100%; 
+        }
+        .info-item input{
+            height:30px;
+            width:90%;
+        }
+        .info-select{
+             font-size: 1.125rem; 
+            color: #333;
+            padding: 0.75rem 1rem;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd; 
+            border-radius: 0.375rem;
+            height:30px;
+            width:90%;
+            box-sizing: border-box; 
+
+        }
+        .info-input:focus {
+            outline: none;
+            border-color: #8B4513; 
+            box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.2); 
+        }
+        .check-in-out{
+                display: flex;
+                justify-content: space-around; 
+        }
+        #check-in,
+#check-out {
+    border: 1px solid #ccc; 
+    border-radius: 0.375rem; 
+    padding: 0.75rem 1rem; 
+    background-color: #f0f0f0; 
+    width: 40%;
+    height: 50px; 
+    box-sizing: border-box; 
+}
+
+#check-in:focus,
+#check-out:focus {
+    outline: none;
+    border-color: #8B4513; /* Highlight on focus */
+    box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.2); /* Subtle shadow on focus */
+}
+
+        .submit-button {
+            background-color:#A0522D; 
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            width: 100%; 
+            margin-top: 1.5rem; 
+            transition: background-color 0.3s ease;
+        }
+        .submit-button:hover {
+            background-color: #8B4513; 
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #777;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .close-button:hover {
+            color: #333;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .info-panel-container {
+                padding: 1.5rem;
+                width: 95%;
+            }
+            .panel-header {
+                font-size: 1.5rem;
+                margin-bottom: 1.25rem;
+            }
+            .info-label {
+                font-size: 0.8rem;
+            }
+            .info-input {
+                font-size: 1rem;
+                padding: 0.6rem 0.8rem;
+            }
+            .book-now-button, .submit-button {
+                padding: 0.6rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .info-panel-container {
+                padding: 1rem;
+            }
+            .panel-header {
+                font-size: 1.25rem;
+                margin-bottom: 1rem;
+            }
+            .info-label {
+                font-size: 0.75rem;
+            }
+            .info-input {
+                font-size: 0.9rem;
+                padding: 0.5rem 0.7rem;
+            }
+            .book-now-button, .submit-button {
+                padding: 0.5rem 1.2rem;
+                font-size: 0.9rem;
+            }
+        }
+/* --- Responsive Adjustments for Smaller Devices --- */
+@media (max-width: 768px) {
+  .booking-card {
+    flex-direction: row;
+    width: 95%; 
+    height: auto;
+    padding: 20px 15px; 
+    margin-top: 30px; 
+    margin-bottom: 30px; 
+  }
+}

@@ -1,5 +1,7 @@
- body {
+body {
+        
           font-family: 'Georgia', serif;
+
             margin: 0;
             padding: 0;
             overflow-x: hidden;
@@ -173,8 +175,7 @@
 .room-card {
     width:70%;
     justify-content: space-around;
-
-    position: center;
+    position: relative;
  
   border-radius: 8px; 
   overflow: hidden; 
@@ -1133,4 +1134,14 @@
     font-size: 1em;
     padding: 10px 20px;
   }
+}
+       #check-in,
+#check-out {
+    border: 1px solid #a78749; 
+    border-radius: 0.375rem; 
+    padding: 0.75rem 1rem; 
+    background-color: #a78749; 
+    width: 40%;
+    height: 50px; 
+    box-sizing: border-box; 
 }

@@ -20,7 +20,7 @@
             <div class="nav-links-desktop">
                 <a href="#Home">Home</a>
                 <a href="#About">About Us</a>
-                <a href="#Booking">Booking</a>
+                <a href="room.html">Room</a>
                 <a href="#Explore">Explore</a>
                 <a href="#">Contact Us</a>
             </div>
@@ -34,7 +34,7 @@
             <div class="nav-wrapper" id="navWrapper">
                 <div class="nav-links"> <a href="#">Home</a>
                     <a href="#">About Us</a>
-                    <a href="#Booking">Booking</a>
+                    <a href="#room.html">Booking</a>
                     <a href="#Explore">Explore</a>
                     <a href="#">Contact Us</a>
                 </div>
@@ -87,7 +87,9 @@
      data-room-available="25"
      data-room-image="./img/single.png">
   <img src="./img/single.png" alt="Luxury Hotel Single Room" class="room-card-image">
+  <a href="room.html">
   <span class="room-type-tag">single</span>
+  </a>
 </div>
 
 <br/>
@@ -98,7 +100,9 @@
      data-room-available="15"
      data-room-image="./img/double.png">
   <img src="./img/double.png" alt="Luxury Hotel Double Room" class="room-card-image">
+  <a href="room.html">
   <span class="room-type-tag">Double</span>
+  </a>
   
 </div>
 <br/>
@@ -109,45 +113,19 @@
      data-room-available="25"
      data-room-image="./img/premium.png">
   <img src="img/premium.png" alt="Luxury Hotel Premium Room" class="room-card-image">
-  <span class="room-type-tag">premium</span>
+  <a href="room.html">  <span class="room-type-tag">premium</span></a>
+
 </div>
-<br/>
-<div class="room-modal-overlay" id="roomModalOverlay">
-  <div class="room-modal-content">
-    <div class="modal-header">
-      <h3 class="modal-title" id="modalRoomName">Room Name Placeholder</h3> <span class="modal-close" id="modalClose">&times;</span>
-    </div>
-
-    <div class="modal-image-container">
-      <img src="" alt="Room Image" class="modal-image" id="modalRoomImage"> </div>
-
-    <div class="modal-details">
-      <p>Type: <span class="detail-value" id="modalRoomType"></span></p> <p>price: <span class="detail-value" id="modalRoomPrice"></span></p> <p>Available Room: <span class="detail-value" id="modalRoomAvailable"></span></p> </div>
-
-    <div class="modal-booking-options">
-      <div class="date-picker-modal">
-        <select id="modal-check-in" name="modal-check-in-date">
-          <input id=" dates" type="date"></input>
-        <!-- <span class="dropdown-arrow"></span> -->
-         </select>
-      </div>
-      <div class="date-picker-modal">
-        <select id="modal-check-out" name="modal-check-out-date">
-         <input type="date"></input>
-        <!-- <span class="dropdown-arrow"></span> -->
-      </div>
-      <button class="book-now-modal-button">book now</button>
-    </div>
+<br/>   
   </div>
-</div>
- </div>
+
 
  <div class="booking-card">
     <div class="date-input-group">
       <label for="check-in">check in</label>
       <div class="date-picker">
         <!-- <select id="check-in" name="check-in-date"> -->
-          <input type="date"></input>
+          <input id="check-in" type="date"></input>
         
         <!-- <span class="dropdown-arrow"></span> -->
       </div>
@@ -157,13 +135,14 @@
       <label for="check-out">check out</label>
       <div class="date-picker">
         <!-- <select id="check-out" name="check-out-date"> -->
-         <input type="date"></input>
+         <input id="check-out" type="date"></input>
           
         <!-- <span class="dropdown-arrow"></span> -->
       </div>
     </div>
 
-    <button class="book-now-button">book now</button>
+    <button id="bookNowBtn" class="book-now-button">
+      <a href="room.html">Book Now</a> </button>
   </div>
   <section class="amenities-section">
   <div class="amenities-header">
@@ -260,114 +239,7 @@
 
     </div>
 </footer>
-
-    <script>
-        // Get references to the toggle button and the mobile navigation wrapper
-        const navMenuToggle = document.getElementById('navMenuToggle');
-        const navWrapper = document.getElementById('navWrapper');
-
-        // Add an event listener to toggle the 'active' class on click
-        navMenuToggle.addEventListener('click', (event) => {
-            event.stopPropagation(); // Prevent document click from immediately closing
-            navWrapper.classList.toggle('active');
-            // Toggle body scroll based on menu state
-            if (navWrapper.classList.contains('active')) {
-                document.body.style.overflow = 'hidden'; // Disable scroll
-            } else {
-                document.body.style.overflow = ''; // Re-enable scroll
-            }
-        });
-
-        // Close mobile menu when a link is clicked
-        const mobileNavLinks = document.querySelectorAll('#navWrapper .nav-links a, #navWrapper .login-button');
-        mobileNavLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (navWrapper.classList.contains('active')) {
-                    navWrapper.classList.remove('active');
-                    document.body.style.overflow = ''; // Re-enable scroll
-                }
-            });
-        });
-
-        // Close mobile menu when clicking outside of it
-        document.addEventListener('click', (event) => {
-            if (!navWrapper.contains(event.target) && !navMenuToggle.contains(event.target)) {
-                if (navWrapper.classList.contains('active')) {
-                    navWrapper.classList.remove('active');
-                    document.body.style.overflow = ''; // Re-enable scroll
-                }
-            }
-        });
-
-      document.addEventListener('DOMContentLoaded', function() {
-    const roomModalOverlay = document.getElementById('roomModalOverlay');
-    const modalCloseButton = document.getElementById('modalClose');
-    const roomCardTriggers = document.querySelectorAll('.room-card');
-
-    // Get references to the modal's dynamic content elements
-    const modalRoomName = document.getElementById('modalRoomName');
-    const modalRoomImage = document.getElementById('modalRoomImage');
-    const modalRoomType = document.getElementById('modalRoomType');
-    const modalRoomPrice = document.getElementById('modalRoomPrice');
-    const modalRoomAvailable = document.getElementById('modalRoomAvailable');
-
-    // Function to populate and open the modal
-    function openRoomModal(event) {
-        const clickedCard = event.currentTarget; // The room-card that was clicked
-
-        // Retrieve data from the clicked card's data attributes
-        const name = clickedCard.dataset.roomName || 'N/A';
-        const type = clickedCard.dataset.roomType || 'N/A';
-        const price = clickedCard.dataset.roomPrice || 'N/A';
-        const available = clickedCard.dataset.roomAvailable || 'N/A';
-        const image = clickedCard.dataset.roomImage || ''; // Empty string if no image path
-
-        // Update the modal's content
-        modalRoomName.textContent = name;
-        modalRoomImage.src = image;
-        modalRoomImage.alt = name; // Update alt text for accessibility
-        modalRoomType.textContent = type;
-        modalRoomPrice.textContent = `$${price}`; // Add '$' sign
-        modalRoomAvailable.textContent = available;
-
-        // Display the modal
-        roomModalOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Optional: Disable body scroll
-    }
-
-    // Function to close the modal
-    function closeRoomModal() {
-        roomModalOverlay.classList.remove('active');
-        document.body.style.overflow = ''; // Optional: Re-enable body scroll
-    }
-
-    // Event listeners to open the modal when a room card is clicked
-    if (roomCardTriggers.length > 0) {
-        roomCardTriggers.forEach(card => {
-            card.addEventListener('click', openRoomModal); // Call openRoomModal with the event object
-        });
-    } else {
-        console.warn("No elements with class 'room-card' found. Room modal won't open.");
-    }
-
-    // Event listener to close the modal when the 'X' button is clicked
-    if (modalCloseButton) {
-        modalCloseButton.addEventListener('click', closeRoomModal);
-    } else {
-        console.error("Modal close button not found. Check ID 'modalClose'.");
-    }
-
-    // Event listener to close the modal when clicking outside the content (on the overlay)
-    if (roomModalOverlay) {
-        roomModalOverlay.addEventListener('click', function(event) {
-            if (event.target === roomModalOverlay) {
-                closeRoomModal();
-            }
-        });
-    } else {
-        console.error("Modal overlay not found. Check ID 'roomModalOverlay'.");
-    }
-});
-    </script>
+    
+    <script src="main.js"></script>
 </body>
 </html>

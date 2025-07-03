@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Information Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        
+        .book-now-button {
+            background-color: #8B4513;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+        .book-now-button:hover {
+            background-color: #A0522D; 
+        }
+
+        /* Modal Overlay Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Faded black background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Ensure it's on top of other content */
+            opacity: 0; /* Hidden by default */
+            visibility: hidden; /* Hidden by default */
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Information Panel Styles (Modal Content) */
+        .info-panel-container {
+            max-width: 600px; /* Max width for the panel */
+            width: 90%; /* Responsive width */
+            background-color: white;
+            border-radius: 0.75rem; /* More rounded corners */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Stronger shadow for modal */
+            padding: 2rem;
+            box-sizing: border-box; /* Include padding in width calculation */
+            transform: translateY(-20px); /* Start slightly above for animation */
+            opacity: 0; /* Hidden by default */
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            position: relative; 
+        }
+        .modal-overlay.active .info-panel-container {
+            transform: translateY(0); /* Slide into view */
+            opacity: 1;
+        }
+
+        .panel-header {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 700; /* font-bold */
+            color: #333;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+        ;
+
+        }
+        .info-item:last-of-type { /* Target the last info-item, not the submit button */
+            margin-bottom: 0;
+        }
+        .info-label {
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 600; /* font-semibold */
+            color: #555;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase; /* Uppercase labels */
+        }
+        .info-input { 
+            font-size: 1.125rem; 
+            color: #333;
+            padding: 0.75rem 1rem;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd; 
+            border-radius: 0.375rem; 
+            width: 100%; 
+            box-sizing: border-box; 
+        }
+        .info-item input{
+            height:30px;
+            width:90%;
+        }
+        .info-input:focus {
+            outline: none;
+            border-color: #8B4513; 
+            box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.2); 
+        }
+        .check-in-out{
+                display: flex;
+                justify-content: space-around; 
+        }
+        #check-in,
+#check-out {
+    border: 1px solid #ccc; 
+    border-radius: 0.375rem; 
+    padding: 0.75rem 1rem; 
+    background-color: #f0f0f0; 
+    width: 40%;
+    height: 50px; 
+    box-sizing: border-box; 
+}
+
+#check-in:focus,
+#check-out:focus {
+    outline: none;
+    border-color: #8B4513; /* Highlight on focus */
+    box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.2); /* Subtle shadow on focus */
+}
+
+        .submit-button {
+            background-color:#A0522D; 
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            width: 100%; 
+            margin-top: 1.5rem; 
+            transition: background-color 0.3s ease;
+        }
+        .submit-button:hover {
+            background-color: #8B4513; 
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #777;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .close-button:hover {
+            color: #333;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .info-panel-container {
+                padding: 1.5rem;
+                width: 95%;
+            }
+            .panel-header {
+                font-size: 1.5rem;
+                margin-bottom: 1.25rem;
+            }
+            .info-label {
+                font-size: 0.8rem;
+            }
+            .info-input {
+                font-size: 1rem;
+                padding: 0.6rem 0.8rem;
+            }
+            .book-now-button, .submit-button {
+                padding: 0.6rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .info-panel-container {
+                padding: 1rem;
+            }
+            .panel-header {
+                font-size: 1.25rem;
+                margin-bottom: 1rem;
+            }
+            .info-label {
+                font-size: 0.75rem;
+            }
+            .info-input {
+                font-size: 0.9rem;
+                padding: 0.5rem 0.7rem;
+            }
+            .book-now-button, .submit-button {
+                padding: 0.5rem 1.2rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Book Now Button -->
+    <button id="bookNowBtn" class="book-now-button">Book Now</button>
+
+    <!-- Modal Overlay (contains the form panel) -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="info-panel-container" id="infoPanel">
+            <button class="close-button" id="closeModalBtn">&times;</button> 
+            <h2 class="panel-header">Booking Information</h2>
+
+            <form id="bookingForm">
+                <div class="info-item">
+                    <label for="name" class="info-label">Name</label>
+                    <input type="text" id="name" name="name" class="info-input" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="info-item">
+                    <label for="email" class="info-label">Email</label>
+                    <input type="email" id="email" name="email" class="info-input" placeholder="Enter your email address" required>
+                </div>
+
+                <div class="info-item">
+                    <label for="phone" class="info-label">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" class="info-input" placeholder="e.g., +1 (555) 123-4567" required>
+                </div>
+
+                <div class="info-item">
+                    <label for="passport" class="info-label">Passport Number</label>
+                    <input type="text" id="passport" name="passport" class="info-input" placeholder="Enter your passport number" required>
+                </div>
+
+                <div class="info-item">
+                    <label for="address" class="info-label">Address</label>
+                    <input type="text" id="address" name="address" class="info-input" placeholder="Enter your full address" required>
+                </div>
+
+                <div class="info-item">
+                    <label for="roomType" class="info-label">Room Type</label>
+                    <input type="text" id="roomType" name="roomType" class="info-input" placeholder="e.g., King Deluxe Room" required>
+                </div>
+                <br/>
+                <div class=" check-in-out">
+
+                <input id="check-in" type="date" class="info-input"></input>
+                <input id="check-out" type="date" class="info-input"></input>
+
+                </div>
+               
+
+                <button type="submit" class="submit-button">Submit Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const bookNowBtn = document.getElementById('bookNowBtn');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const infoPanel = document.getElementById('infoPanel');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const bookingForm = document.getElementById('bookingForm');
+
+        // Function to show the modal
+        function showModal() {
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        // Function to hide the modal
+        function hideModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        
+        bookNowBtn.addEventListener('click', showModal);
+        closeModalBtn.addEventListener('click', hideModal);
+        modalOverlay.addEventListener('click', (event) => {
+          
+            if (event.target === modalOverlay) {
+                hideModal();
+            }
+        });
+
+        
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                hideModal();
+            }
+        });
+
+        
+        bookingForm.addEventListener('submit', (event) => {
+            event.preventDefault(); 
+
+         
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                passport: document.getElementById('passport').value,
+                address: document.getElementById('address').value,
+                roomType: document.getElementById('roomType').value
+            };
+
+            console.log('Form Submitted:', formData);
+            
+            hideModal();
+            
+            alert('Booking submitted successfully!'); 
+        });
+    </script>
+</body>
+</html>

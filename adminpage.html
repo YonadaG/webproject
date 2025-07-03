@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS for card styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Firebase SDKs (will be replaced by Laravel API calls) -->
+    <script type="module">
+        // These Firebase imports are currently used for demonstration.
+        // For a Laravel backend, you would remove these and use standard fetch API calls.
+        // Firebase configuration (provided by the environment)
+        // If using Laravel, this entire Firebase setup would be removed or replaced with your Laravel API base URL.
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id'; // Unique app ID
+
+        // Initialize Firebase (remove for Laravel backend)
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        let currentUserId = null; // To store the authenticated user ID
+
+        // Function to display messages (replaces alert)
+        function showMessage(message, duration = 3000) {
+            const customMessageBox = document.getElementById('customMessageBox');
+            if (customMessageBox) {
+                customMessageBox.textContent = message;
+                customMessageBox.classList.add('show');
+                clearTimeout(customMessageBox.messageTimeout); // Clear previous timeout
+                customMessageBox.messageTimeout = setTimeout(() => {
+                    customMessageBox.classList.remove('show');
+                }, duration);
+            } else {
+                console.warn("Custom message box element not found.");
+            }
+        }
+
+        // Authentication State Change Listener
+        // For Laravel, your authentication would typically happen on the server side
+        // or via an API endpoint that returns a token.
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUserId = user.uid;
+                document.getElementById('userIdDisplay').textContent = `User ID: ${currentUserId}`;
+                console.log("Authenticated as:", currentUserId);
+                // Once authenticated, start fetching bookings
+                fetchBookings();
+            } else {
+                // Sign in anonymously if no user is authenticated
+                try {
+                    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+                    if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                        console.log("Signed in with custom token.");
+                    } else {
+                        await signInAnonymously(auth);
+                        console.log("Signed in anonymously.");
+                    }
+                } catch (error) {
+                    console.error("Error during authentication:", error);
+                    showMessage("Authentication failed. Please try again.");
+                }
+            }
+        });
+
+        // Function to fetch and display bookings
+        // THIS IS WHERE YOU WOULD INTEGRATE WITH YOUR LARAVEL API FOR FETCHING DATA
+        function fetchBookings() {
+            if (!currentUserId) {
+                console.warn("User not authenticated yet. Cannot fetch bookings.");
+                return;
+            }
+
+            const bookingsTableBody = document.getElementById('bookingsTableBody');
+            bookingsTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">Loading bookings...</td></tr>`; // Show loading state
+
+            // --- LARAVEL INTEGRATION POINT: FETCHING BOOKINGS ---
+            // Replace the Firestore onSnapshot with a fetch() call to your Laravel API.
+            // Example:
+            // const LARAVEL_API_BASE_URL = '/api'; // Adjust to your Laravel API base URL
+
+            // fetch(`${LARAVEL_API_BASE_URL}/bookings`)
+            //     .then(response => {
+            //         if (!response.ok) {
+            //             throw new Error(`HTTP error! status: ${response.status}`);
+            //         }
+            //         return response.json();
+            //     })
+            //     .then(bookingsData => {
+            //         bookingsTableBody.innerHTML = ''; // Clear loading state
+
+            //         if (bookingsData.length === 0) {
+            //             const noDataRow = document.createElement('tr');
+            //             noDataRow.innerHTML = `<td colspan="6" class="text-center py-4 text-gray-500">No bookings found.</td>`;
+            //             bookingsTableBody.appendChild(noDataRow);
+            //             return;
+            //         }
+
+            //         bookingsData.forEach(booking => {
+            //             const row = document.createElement('tr');
+            //             row.innerHTML = `
+            //                 <td><a href="#" class="booking-id-link">#${booking.id.substring(0, 5)}...</a></td>
+            //                 <td>${booking.guest_name || 'N/A'}</td>
+            //                 <td>${booking.room_number || 'N/A'}</td>
+            //                 <td>${booking.check_in_date || 'N/A'}</td>
+            //                 <td>${booking.check_out_date || 'N/A'}</td>
+            //                 <td>
+            //                     <select class="status-select" data-booking-id="${booking.id}">
+            //                         <option value="confirmed">Confirmed</option>
+            //                         <option value="checked-in">Checked In</option>
+            //                         <option value="pending">Pending</option>
+            //                         <option value="checked-out">Checked Out</option>
+            //                     </select>
+            //                 </td>
+            //             `;
+
+            //             const selectElement = row.querySelector('.status-select');
+            //             if (selectElement) {
+            //                 selectElement.value = booking.status || 'pending';
+            //                 selectElement.classList.add(booking.status || 'pending');
+            //                 selectElement.addEventListener('change', async function() {
+            //                     const newStatus = this.value;
+            //                     const bookingId = this.dataset.bookingId;
+            //                     // Call the updateBookingStatus function
+            //                     updateBookingStatus(bookingId, newStatus, this);
+            //                 });
+            //             }
+            //             bookingsTableBody.appendChild(row);
+            //         });
+            //     })
+            //     .catch(error => {
+            //         console.error("Error fetching bookings:", error);
+            //         showMessage("Error loading bookings. Please try again.");
+            //         bookingsTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-red-500">Failed to load bookings.</td></tr>`;
+            //     });
+            // --- END LARAVEL INTEGRATION POINT: FETCHING BOOKINGS ---
+
+
+            // --- FIRESTORE DEMO CODE (REMOVE FOR LARAVEL BACKEND) ---
+            // Define the collection path for public data
+            const bookingsCollectionRef = collection(db, `artifacts/${appId}/public/data/bookings`);
+
+            // Listen for real-time updates (remove for Laravel backend)
+            onSnapshot(bookingsCollectionRef, (snapshot) => {
+                bookingsTableBody.innerHTML = ''; // Clear existing rows
+
+                snapshot.forEach((docSnapshot) => {
+                    const booking = docSnapshot.data();
+                    const bookingId = docSnapshot.id; // Firestore document ID as booking ID
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><a href="#" class="booking-id-link">#${bookingId.substring(0, 5)}...</a></td>
+                        <td>${booking.guestName || 'N/A'}</td>
+                        <td>${booking.roomNumber || 'N/A'}</td>
+                        <td>${booking.checkInDate || 'N/A'}</td>
+                        <td>${booking.checkOutDate || 'N/A'}</td>
+                        <td>
+                            <select class="status-select" data-booking-id="${bookingId}">
+                                <option value="confirmed">Confirmed</option>
+                                <option value="checked-in">Checked In</option>
+                                <option value="pending">Pending</option>
+                                <option value="checked-out">Checked Out</option>
+                            </select>
+                        </td>
+                    `;
+
+                    // Set the selected option and apply initial status class
+                    const selectElement = row.querySelector('.status-select');
+                    if (selectElement) {
+                        selectElement.value = booking.status || 'pending'; // Default to pending
+                        selectElement.classList.add(booking.status || 'pending'); // Apply initial styling
+                        selectElement.addEventListener('change', async function() {
+                            const newStatus = this.value;
+                            const docRef = doc(db, `artifacts/${appId}/public/data/bookings`, bookingId);
+                            try {
+                                await updateDoc(docRef, { status: newStatus });
+                                showMessage(`Booking ${bookingId.substring(0, 5)}... status updated to ${newStatus}!`);
+                                // The onSnapshot listener will automatically re-render the row with new class
+                            } catch (error) {
+                                console.error("Error updating document: ", error);
+                                showMessage(`Failed to update booking ${bookingId.substring(0, 5)}....`);
+                            }
+                        });
+                    }
+                    bookingsTableBody.appendChild(row);
+                });
+
+                // If no bookings, display a message
+                if (snapshot.empty) {
+                    const bookingsTableBody = document.getElementById('bookingsTableBody');
+                    const noDataRow = document.createElement('tr');
+                    noDataRow.innerHTML = `<td colspan="6" class="text-center py-4 text-gray-500">No bookings found.</td>`;
+                    bookingsTableBody.appendChild(noDataRow);
+                }
+            }, (error) => {
+                console.error("Error fetching bookings: ", error);
+                showMessage("Error loading bookings. Please try again.");
+            });
+            // --- END FIRESTORE DEMO CODE ---
+        }
+
+        // --- LARAVEL INTEGRATION POINT: UPDATING BOOKING STATUS ---
+        // You would define a separate function for updating status via Laravel API.
+        // Example:
+        // async function updateBookingStatus(bookingId, newStatus, selectElement) {
+        //     const LARAVEL_API_BASE_URL = '/api'; // Adjust to your Laravel API base URL
+        //     try {
+        //         const response = await fetch(`${LARAVEL_API_BASE_URL}/bookings/${bookingId}/status`, {
+        //             method: 'PUT', // Or POST, depending on your API design
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 // 'X-CSRF-TOKEN': 'your-csrf-token-here' // If using Laravel's CSRF protection
+        //             },
+        //             body: JSON.stringify({ status: newStatus })
+        //         });
+
+        //         if (!response.ok) {
+        //             throw new Error(`HTTP error! status: ${response.status}`);
+        //         }
+
+        //         const data = await response.json();
+        //         if (data.success) {
+        //             showMessage(`Booking ${bookingId.substring(0, 5)}... status updated to ${newStatus}!`);
+        //             // No need to re-render the whole table if you only update the specific select's class
+        //             selectElement.classList.remove('confirmed', 'checked-in', 'pending', 'checked-out');
+        //             selectElement.classList.add(newStatus);
+        //         } else {
+        //             showMessage(`Failed to update booking ${bookingId.substring(0, 5)}....`);
+        //         }
+        //     } catch (error) {
+        //         console.error("Error updating status:", error);
+        //         showMessage(`Error updating booking ${bookingId.substring(0, 5)}....`);
+        //     }
+        // }
+        // --- END LARAVEL INTEGRATION POINT: UPDATING BOOKING STATUS ---
+
+        // Initial setup for status selects (for any static data if present, or just for styling)
+        // This part is now handled dynamically within fetchBookings, but kept for robustness
+        document.querySelectorAll('.status-select').forEach(select => {
+            const initialStatus = select.value;
+            select.classList.add(initialStatus);
+        });
+    </script>
+    <style>
+        body {
+           font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8; /* Light background for the page */
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Top Navigation Bar */
+        .admin-navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: white;
+            border-bottom: 1px solid #eee;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .admin-navbar-brand {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+        }
+        .admin-main-nav { /* New class for main navigation links */
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            margin-left: auto; /* Push main nav to center */
+            margin-right: auto; /* Push main nav to center */
+        }
+        .admin-main-nav a {
+            color: #555;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        .admin-main-nav a:hover {
+            color: #856404; /* Highlight color on hover */
+        }
+
+        /* Profile Section */
+        .admin-profile-section {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem; /* Space between avatar and text */
+        }
+        .admin-profile-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ccc; /* Small border for avatar */
+        }
+        .admin-profile-name {
+            font-weight: 500;
+            color: #333;
+        }
+        .admin-profile-link {
+            color:#856404;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            margin-left: 0.5rem; /* Space from name if both are present */
+        }
+        .admin-profile-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Content Area */
+        .dashboard-content {
+            padding: 2rem;
+            max-width: 1400px; /* Max width for content */
+            margin: 0 auto; /* Center content */
+        }
+        .dashboard-header h1 {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        .dashboard-header p {
+            font-size: 1rem;
+            color: #777;
+            margin-bottom: 2rem;
+        }
+
+        /* KPI Cards Section (Using Flexbox for horizontal scroll with Bootstrap cards) */
+        .kpi-grid {
+            display: flex;
+            flex-wrap: nowrap; /* Prevent cards from wrapping to the next line */
+            gap: 1.5rem; /* Gap between cards */
+            margin-bottom: 3rem;
+            overflow-x: auto; /* Enable horizontal scrolling if cards overflow */
+            padding-bottom: 1rem; /* Add some padding for scrollbar if needed */
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: #ccc #f1f1f1; /* Firefox */
+        }
+        /* Custom scrollbar for Webkit browsers */
+        .kpi-grid::-webkit-scrollbar {
+            height: 8px;
+        }
+        .kpi-grid::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .kpi-grid::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 10px;
+        }
+        .kpi-grid::-webkit-scrollbar-thumb:hover {
+            background: #a0a0a0;
+        }
+
+        /* Override Bootstrap card styles to match original design */
+        .kpi-card {
+            flex: 0 0 250px; /* Fixed width for each card, prevent shrinking/growing */
+            background-color: white;
+            padding: 1.5rem; /* Original padding */
+            border-radius: 0.75rem; /* Original border-radius */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Original shadow */
+            display: flex; /* Ensure flex properties are maintained */
+            flex-direction: column; /* Ensure content stacks */
+            justify-content: space-between;
+            min-height: 120px; /* Ensure consistent height */
+            border: none; /* Remove default Bootstrap border */
+        }
+        .kpi-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+        }
+        .kpi-card .label {
+            font-size: 0.9rem;
+            color: #777;
+            margin-top: 0.25rem;
+        }
+        .kpi-card .change {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        .kpi-card .change.positive {
+            color: #28a745; /* Green */
+        }
+        .kpi-card .change.negative {
+            color: #dc3545; /* Red */
+        }
+
+        /* Recent Bookings Table */
+        .recent-bookings-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        .table-container {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            overflow-x: auto; /* Enable horizontal scrolling for small screens */
+        }
+        .bookings-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        .bookings-table th {
+            padding: 1rem 1.5rem;
+            background-color: #f0f0f0; /* Light gray header */
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #555;
+            text-transform: uppercase;
+            border-bottom: 1px solid #ddd;
+        }
+        .bookings-table td {
+            padding: 1rem 1.5rem;
+            font-size: 0.95rem;
+            color: #333;
+            border-bottom: 1px solid #eee;
+        }
+        .bookings-table tr:last-child td {
+            border-bottom: none; /* No border for the last row */
+        }
+        .bookings-table tbody tr:hover {
+            background-color: #f9f9f9; /* Subtle hover effect */
+        }
+        .booking-id-link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .booking-id-link:hover {
+            text-decoration: underline;
+        }
+        /* Status Select Dropdown */
+        .status-select {
+            padding: 0.3rem 0.7rem;
+            border-radius: 9999px; /* Pill shape */
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+            display: inline-block; /* Allow padding */
+            border: 1px solid transparent; /* Default transparent border */
+            cursor: pointer;
+            -webkit-appearance: none; /* Remove default dropdown arrow */
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236B7280'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); /* Custom arrow */
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1rem;
+            padding-right: 2rem; /* Make space for the custom arrow */
+        }
+
+        /* Status Select Colors based on value */
+        .status-select[value="confirmed"] {
+            background-color: #d4edda; /* Light green */
+            color: #155724; /* Dark green */
+        }
+        .status-select[value="checked-in"] {
+            background-color: #cce5ff; /* Light blue */
+            color: #004085; /* Dark blue */
+        }
+        .status-select[value="pending"] {
+            background-color: #fff3cd; /* Light yellow */
+            color: #856404; /* Dark yellow */
+        }
+        .status-select[value="checked-out"] {
+            background-color: #f8d7da; /* Light red */
+            color: #721c24; /* Dark red */
+        }
+        /* Fallback for browsers that don't support attribute selectors well or for initial load */
+        .status-select.confirmed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-select.checked-in {
+            background-color: #cce5ff;
+            color: #856404;
+        }
+        .status-select.pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-select.checked-out {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+
+        /* Custom Message Box Styles */
+        .custom-message-box {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background-color: #333;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out, visibility 0.3s;
+        }
+        .custom-message-box.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+
+        /* Responsive Adjustments */
+        @media (max-width: 1024px) {
+            .admin-navbar {
+                padding: 1rem 1.5rem;
+            }
+            .admin-main-nav {
+                gap: 1rem;
+            }
+            .dashboard-content {
+                padding: 1.5rem;
+            }
+            .dashboard-header h1 {
+                font-size: 2rem;
+            }
+            .kpi-card .value {
+                font-size: 1.75rem;
+            }
+            .kpi-card .label {
+                font-size: 0.85rem;
+            }
+            .bookings-table th, .bookings-table td {
+                padding: 0.8rem 1.2rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1rem;
+            }
+            .admin-main-nav {
+                flex-wrap: wrap; /* Allow links to wrap */
+                justify-content: center;
+                width: 100%;
+                margin-top: 1rem;
+                gap: 0.8rem;
+                margin-left: 0; /* Remove auto margins on mobile */
+                margin-right: 0;
+            }
+            .admin-main-nav a {
+                font-size: 0.9rem;
+            }
+            .admin-profile-section {
+                width: 100%; /* Take full width on mobile */
+                justify-content: flex-end; /* Push profile to the right */
+                margin-top: 0.5rem; /* Space from nav links */
+            }
+            .dashboard-content {
+                padding: 1rem;
+            }
+            .dashboard-header h1 {
+                font-size: 1.75rem;
+            }
+            .dashboard-header p {
+                font-size: 0.9rem;
+            }
+            /* KPI grid will now scroll horizontally on smaller screens */
+            .kpi-grid {
+                padding-bottom: 1rem; 
+            }
+            .kpi-card {
+                padding: 1.25rem;
+            }
+            .kpi-card .value {
+                font-size: 1.5rem;
+            }
+            .kpi-card .label {
+                font-size: 0.8rem;
+            }
+            .recent-bookings-section h2 {
+                font-size: 1.3rem;
+            }
+            .bookings-table th, .bookings-table td {
+                font-size: 0.85rem;
+            }
+            .status-select { 
+                padding: 0.2rem 0.5rem;
+                font-size: 0.75rem;
+                padding-right: 1.5rem; 
+                background-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .admin-navbar {
+                padding: 0.75rem;
+            }
+            .admin-navbar-brand {
+                font-size: 1.1rem;
+            }
+            .admin-main-nav {
+                gap: 0.6rem;
+                font-size: 0.85rem;
+            }
+            .dashboard-content {
+                padding: 0.75rem;
+            }
+            .dashboard-header h1 {
+                font-size: 1.5rem;
+            }
+            .kpi-card .value {
+                font-size: 1.25rem;
+            }
+            .bookings-table th, .bookings-table td {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Navbar -->
+    <nav class="admin-navbar">
+        <div class="admin-navbar-brand">Hotel Admin</div>
+        <!-- Main navigation links (centered) -->
+        <div class="admin-main-nav">
+            <a href="#">Dashboard</a>
+            <a href="#">Bookings</a>
+            <a href="#">Rooms</a>
+            <a href="#">Guests</a>
+            <a href="#">Reports</a>
+        </div>
+        <!-- Profile space on the right -->
+        <div class="admin-profile-section">
+            <img src="" alt="User Avatar" class="admin-profile-avatar">
+            <span class="admin-profile-name">admin user</span>
+            <a href="#" class="admin-profile-link">Profile</a>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-content">
+        <div class="dashboard-header">
+            <h1>Dashboard</h1>
+            <p>Overview of your hotel's performance</p>
+            <div id="userIdDisplay" class="text-gray-600 text-sm mt-2">Authenticating...</div>
+        </div>
+
+        <!-- KPI Grid (using Bootstrap card structure) -->
+        <div class="kpi-grid">
+            <div class="card kpi-card">
+                <div class="card-body">
+                    <div class="label">Total Bookings</div>
+                    <div class="value">1,250</div>
+                    <div class="change positive">+10%</div>
+                </div>
+            </div>
+            <div class="card kpi-card">
+                <div class="card-body">
+                    <div class="label">Revenue</div>
+                    <div class="value">$250,000</div>
+                    <div class="change positive">+15%</div>
+                </div>
+            </div>
+            <div class="card kpi-card">
+                <div class="card-body">
+                    <div class="label">Occupancy Rate</div>
+                    <div class="value">75%</div>
+                    <div class="change negative">-5%</div>
+                </div>
+            </div>
+            <div class="card kpi-card">
+                <div class="card-body">
+                    <div class="label">Recent Activity</div>
+                    <div class="value">10</div>
+                    <div class="change positive">+2%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Bookings Section -->
+        <div class="recent-bookings-section">
+            <h2>Recent Bookings</h2>
+            <div class="table-container">
+                <table class="bookings-table">
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Guest Name</th>
+                            <th>Room Number</th>
+                            <th>Check-in Date</th>
+                            <th>Check-out Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingsTableBody">
+                        <!-- Booking rows will be dynamically inserted here by JavaScript -->
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-gray-500">Loading bookings...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Message Box for Notifications -->
+    <div id="customMessageBox" class="custom-message-box">
+        Booking status updated successfully!
+    </div>
+</body>
+</html>
