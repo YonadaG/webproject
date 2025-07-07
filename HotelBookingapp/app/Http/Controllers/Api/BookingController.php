@@ -10,6 +10,10 @@ use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
+
+    public function index(){
+        Booking::all();
+    }
     public function store(Request $request)
     {
 
@@ -50,6 +54,35 @@ class BookingController extends Controller
         return response()->json($booking->load('room'), 201);
 
     }
+
+    public function show(Request $request,int $id){
+        $booking=Booking::findOrFail($id);
+        return response()->json($booking->load('room'), 201);
+
+    }
+    public function update(Request $request,int $id){
+        $validatedData = $request->validate([
+            'room_id' => 'nullable|exists:rooms,id',
+            'guest_id' => 'nullable|exists:guests,id',
+            'check_in_date' => 'nullable|date',
+            'check_out_date' => 'nullable|date|after:check_in_date',
+            'number_of_guests' => 'nullable|integer|min:1',
+            'price' => 'nullable|integer|min:1',
+
+        ]);
+        $booking=Booking::findOrFail($id);
+        $booking->update($validatedData);
+        return response()->json($booking->load('room'), 201);
+    }
+
+    public function destroy(int $id)
+    {
+        $booking=Booking::findOrFail($id);
+        $booking->delete();
+    }
+
+
+
 
 
 }

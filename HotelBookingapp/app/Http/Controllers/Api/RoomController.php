@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Room;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 
 class RoomController extends Controller
@@ -29,8 +30,16 @@ class RoomController extends Controller
             'is_available' => 'required',
             'max_occupancy'=> 'required',
             'features' => 'nullable',
+            'cover_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+
 
             ]);
+
+
+        if ($request->hasFile('cover_image')) {
+            $path = $request->file('cover_image')->store('image', 'public');
+            $validatedData['cover_image'] = $path;
+        }
 
 
         $room =Room::create($validatedData);
@@ -39,6 +48,7 @@ class RoomController extends Controller
     }
 
     public function update(Request $request, $id){
+        $room= Room::findOrFail($id);
         $validatedData = $request->validate([
             'room_no' => 'required|unique:rooms',
             'room_type' => 'nullable',
@@ -49,8 +59,16 @@ class RoomController extends Controller
             'features' => 'nullable|string',
 
         ]);
+        if ($request->hasFile('cover_image')) {
+            if ($room->cover_image) {
+                Storage::disk('public')->delete($room->cover_image);
+            }
 
-        $room= Room::findOrFail($id);
+            $path = $request->file('cover_image')->store('image', 'public');
+            $validatedData['cover_image'] = $path;
+        }
+
+
         $room->update($validatedData);
         return response()->json($room, 200);
     }
