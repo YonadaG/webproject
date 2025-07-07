@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Room extends Model
 {
@@ -13,8 +14,18 @@ class Room extends Model
         'is_available',
         'max_occupancy',
         'features',
-        'price_perNight'
+        'price_perNight',
+        'image'
 
     ];
+
+    protected $appends=[
+      'cover_image_url'
+    ];
+
+    public function getCoverImageUrlAttribute(): ?string
+    {
+        return $this->cover_image ? Storage::url($this->cover_image) : null;
+    }
 
 }

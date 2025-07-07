@@ -16,4 +16,7 @@ class Guest extends Model
 
     ];
 
+
+
+
 }

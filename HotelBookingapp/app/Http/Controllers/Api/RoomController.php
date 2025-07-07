@@ -28,21 +28,35 @@ class RoomController extends Controller
             'price_perNight' => 'required',
             'is_available' => 'required',
             'max_occupancy'=> 'required',
-            'features' => 'nullable|string',
+            'features' => 'nullable',
+
             ]);
+
+
         $room =Room::create($validatedData);
         return response()->json($room, 201);
 
     }
 
     public function update(Request $request, $id){
+        $validatedData = $request->validate([
+            'room_no' => 'required|unique:rooms',
+            'room_type' => 'nullable',
+            'bed_count' => 'nullable',
+            'price_perNight' => 'nullable',
+            'is_available' => 'nullable',
+            'max_occupancy'=> 'nullable',
+            'features' => 'nullable|string',
+
+        ]);
+
         $room= Room::findOrFail($id);
-        $room->update($request->all());
+        $room->update($validatedData);
         return response()->json($room, 200);
     }
 
     public function delete($id){
-        Room::destroy($id);
+        $room= Room::findOrFail($id);
         return response()->json('Room deleted', 200);
     }
 
