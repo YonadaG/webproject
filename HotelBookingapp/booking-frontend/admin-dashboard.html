@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Hotel Booking</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="src/style.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center border-b border-gray-200 pb-6 mb-8">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+                <p class="text-sm text-gray-500" id="welcomeMessage">Welcome back!</p>
+            </div>
+            <button id="logoutBtn" 
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                Logout
+            </button>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="mb-8">
+            <nav class="flex space-x-4" aria-label="Tabs">
+                <a href="admin-dashboard.html" class="px-3 py-2 font-medium text-sm rounded-md bg-indigo-100 text-indigo-700">
+                    Dashboard
+                </a>
+                <a href="admin-rooms.html" class="px-3 py-2 font-medium text-sm rounded-md text-gray-500 hover:bg-gray-50 hover:text-gray-700">
+                    Manage Rooms
+                </a>
+                <button id="bookingsTab" class="px-3 py-2 font-medium text-sm rounded-md text-gray-500 hover:bg-gray-50 hover:text-gray-700">
+                    Bookings
+                </button>
+            </nav>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+            <!-- Total Bookings -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-blue-500 rounded-md p-3">
+                            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Total Bookings</dt>
+                                <dd class="flex items-baseline">
+                                    <div id="totalBookings" class="text-2xl font-semibold text-gray-900">0</div>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Available Rooms -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
+                            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Available Rooms</dt>
+                                <dd class="flex items-baseline">
+                                    <div id="availableRooms" class="text-2xl font-semibold text-gray-900">0</div>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Revenue -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
+                            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Total Revenue</dt>
+                                <dd class="flex items-baseline">
+                                    <div id="totalRevenue" class="text-2xl font-semibold text-gray-900">$0</div>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Bookings -->
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+            <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                <h2 class="text-lg font-medium text-gray-900">Recent Bookings</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <div id="recentBookingsTable" class="p-4">
+                    <p class="text-gray-500">Loading recent bookings...</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- All Bookings (hidden by default, shown when Bookings tab is clicked) -->
+        <div id="allBookingsSection" class="hidden">
+            <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+                <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                    <h2 class="text-lg font-medium text-gray-900">All Bookings</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <div id="bookingsTable" class="p-4">
+                        <p class="text-gray-500">Loading all bookings...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script type="module">
+        import { isAuthenticated, logout, getCurrentUser, showAlert } from './src/api.js';
+        import { fetchBookings, renderBookings, renderError } from './src/bookings.js';
+
+        // Helper function to clear auth data
+        function clearAuthData() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            sessionStorage.removeItem('authToken');
+            sessionStorage.removeItem('authInitialized');
+            console.log('Cleared all auth data');
+        }
+        
+        // Helper function to redirect to login
+        function redirectToLogin() {
+            // Use replaceState to prevent back button from returning to dashboard
+            window.history.replaceState(null, '', window.location.href);
+            window.location.href = 'admin-login.html';
+        }
+
+        // Wait for DOM to be fully loaded before initializing
+        async function initializeDashboard() {
+            console.log('Dashboard loaded, checking auth...');
+            
+            try {
+                const authStatus = await isAuthenticated();
+                const user = getCurrentUser();
+                
+                if (!authStatus || !user) {
+                    throw new Error('Not authenticated');
+                }
+                
+                console.log('User is authenticated:', user);
+                
+                // Update welcome message
+                const welcomeMessage = document.getElementById('welcomeMessage');
+                if (welcomeMessage) {
+                    welcomeMessage.textContent = `Welcome, ${user.name || 'Admin'}!`;
+                }
+                
+                // Initialize UI components
+                initializeUI();
+                
+                // Load initial data
+                await loadDashboardData();
+                showSection('dashboard');
+                
+            } catch (error) {
+                console.error('Initialization failed:', error);
+                clearAuthData();
+                redirectToLogin();
+            }
+        }
+
+        // Initialize UI components
+        function initializeUI() {
+            // Set up navigation
+            setupNavigation();
+            
+            // Set up logout button
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    try {
+                        // Show loading state
+                        const originalText = logoutBtn.innerHTML;
+                        logoutBtn.disabled = true;
+                        logoutBtn.innerHTML = 'Logging out...';
+                        
+                        // Call the logout API
+                        await logout();
+                        
+                        // Clear local auth data
+                        clearAuthData();
+                        
+                        // Redirect to login
+                        redirectToLogin();
+                    } catch (error) {
+                        console.error('Logout failed:', error);
+                        showAlert('Failed to logout. Please try again.', 'error');
+                        
+                        // Re-enable the button
+                        if (logoutBtn) {
+                            logoutBtn.disabled = false;
+                            logoutBtn.innerHTML = 'Logout';
+                        }
+                    }
+                });
+            } else {
+                console.warn('Logout button not found');
+            }
+        }
+
+        // Start initialization when DOM is fully loaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeDashboard);
+        } else {
+            // DOMContentLoaded has already fired
+            initializeDashboard();
+        }
+
+        // Navigation functions
+        function setupNavigation() {
+            console.log('Setting up navigation...');
+            
+            // Get navigation elements
+            const dashboardLink = document.querySelector('a[href="admin-dashboard.html"]');
+            const roomsLink = document.querySelector('a[href="admin-rooms.html"]');
+            const bookingsTab = document.getElementById('bookingsTab');
+            
+            // Add click handlers if elements exist
+            if (dashboardLink) {
+                dashboardLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showSection('dashboard');
+                });
+            } else {
+                console.warn('Dashboard link not found');
+            }
+            
+            if (roomsLink) {
+                // Rooms is a separate page, no need for click handler
+                // Just ensure it's not preventing default
+                roomsLink.addEventListener('click', (e) => {
+                    // Let the link work normally
+                });
+            } else {
+                console.warn('Rooms link not found');
+            }
+            
+            if (bookingsTab) {
+                bookingsTab.addEventListener('click', async () => {
+                    try {
+                        await loadBookings();
+                        showSection('bookings');
+                    } catch (error) {
+                        console.error('Error loading bookings:', error);
+                        showAlert('Failed to load bookings. Please try again.', 'error');
+                    }
+                });
+            } else {
+                console.warn('Bookings tab not found');
+            }
+            
+            console.log('Navigation setup complete');
+        }
+        
+        function showSection(section) {
+            console.log('Showing section:', section);
+            
+            // Update active tab styling
+            const dashboardLink = document.querySelector('a[href="admin-dashboard.html"]');
+            const roomsLink = document.querySelector('a[href="admin-rooms.html"]');
+            const bookingsTab = document.getElementById('bookingsTab');
+            
+            // Reset all tabs
+            if (dashboardLink) {
+                dashboardLink.className = 'px-3 py-2 font-medium text-sm rounded-md text-gray-500 hover:bg-gray-50 hover:text-gray-700';
+            }
+            if (roomsLink) {
+                roomsLink.className = 'px-3 py-2 font-medium text-sm rounded-md text-gray-500 hover:bg-gray-50 hover:text-gray-700';
+            }
+            if (bookingsTab) {
+                bookingsTab.className = 'px-3 py-2 font-medium text-sm rounded-md text-gray-500 hover:bg-gray-50 hover:text-gray-700';
+            }
+            
+            // Show selected section and update active tab
+            switch(section) {
+                case 'dashboard':
+                    if (dashboardLink) {
+                        dashboardLink.className = 'px-3 py-2 font-medium text-sm rounded-md bg-indigo-100 text-indigo-700';
+                    }
+                    // The dashboard is the main content, always shown
+                    break;
+                    
+                case 'bookings':
+                    if (bookingsTab) {
+                        bookingsTab.className = 'px-3 py-2 font-medium text-sm rounded-md bg-indigo-100 text-indigo-700';
+                    }
+                    loadBookings();
+                    break;
+            }
+        }
+        
+        // Fetch and display dashboard data
+        async function loadDashboardData() {
+            console.log('Loading dashboard data...');
+            
+            try {
+                // Get the main content container
+                const mainContent = document.querySelector('.max-w-7xl');
+                if (!mainContent) {
+                    throw new Error('Main content container not found');
+                }
+                
+                // Show loading state
+                const loadingHTML = `
+                    <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Loading Dashboard...</h3>
+                            <div class="mt-2 max-w-xl text-sm text-gray-500">
+                                <p>Please wait while we load your dashboard data.</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Insert loading state after the header
+                const header = document.querySelector('.border-b');
+                if (header && header.nextElementSibling) {
+                    header.insertAdjacentHTML('afterend', loadingHTML);
+                }
+
+                // Fetch bookings data
+                console.log('Fetching bookings...');
+                const bookings = await fetchBookings();
+                console.log('Bookings loaded:', bookings.length);
+                const totalBookings = bookings.length;
+                
+                // Remove loading indicator
+                const loadingIndicator = document.querySelector('.bg-white.shadow.overflow-hidden');
+                if (loadingIndicator && loadingIndicator.textContent.includes('Loading Dashboard')) {
+                    loadingIndicator.remove();
+                }
+                
+                // Update the stats cards with real data
+                const statsContainers = document.querySelectorAll('.bg-white.overflow-hidden.shadow.rounded-lg');
+                if (statsContainers.length >= 3) {
+                    // Update Total Bookings
+                    const bookingsCount = statsContainers[0].querySelector('.text-2xl');
+                    if (bookingsCount) bookingsCount.textContent = totalBookings;
+                    
+                    // Update Available Rooms (placeholder for now)
+                    const availableRooms = 0; // Will be updated when fetchRooms is implemented
+                    const roomsCount = statsContainers[1].querySelector('.text-2xl');
+                    if (roomsCount) roomsCount.textContent = availableRooms;
+                    
+                    // Update Total Revenue (placeholder for now)
+                    const totalRevenue = 0; // Will be calculated when needed
+                    const revenueAmount = statsContainers[2].querySelector('.text-2xl');
+                    if (revenueAmount) revenueAmount.textContent = `$${totalRevenue.toLocaleString()}`;
+                }
+                
+                // Update recent bookings table if it exists
+                const recentBookingsSection = document.querySelector('.bg-white.shadow.overflow-hidden.sm\\:rounded-lg.mb-8');
+                if (recentBookingsSection) {
+                    const recentBookings = bookings.slice(0, 5);
+                    const bookingsTableContainer = recentBookingsSection.querySelector('#recentBookingsTable');
+                    
+                    if (bookingsTableContainer) {
+                        if (recentBookings.length === 0) {
+                            // Show a message when there are no bookings
+                            bookingsTableContainer.innerHTML = `
+                                <div class="text-center py-8">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                                    </svg>
+                                    <h3 class="mt-2 text-sm font-medium text-gray-900">No bookings found</h3>
+                                    <p class="mt-1 text-sm text-gray-500">There are no recent bookings to display.</p>
+                                </div>
+                            `;
+                        } else {
+                            // Create table if it doesn't exist
+                            if (!recentBookingsSection.querySelector('table')) {
+                                bookingsTableContainer.innerHTML = `
+                                    <table class="min-w-full divide-y divide-gray-200">
+                                        <thead class="bg-gray-50">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Guest</th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Room</th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Check-in</th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Check-out</th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                        </tbody>
+                                    </table>
+                                `;
+                            }
+                            
+                            const tbody = recentBookingsSection.querySelector('tbody');
+                            if (tbody) {
+                                tbody.innerHTML = recentBookings.map(booking => `
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${booking.id}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${booking.guest_name || 'N/A'}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${booking.room_number || 'N/A'}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${booking.check_in ? new Date(booking.check_in).toLocaleDateString() : 'N/A'}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${booking.check_out ? new Date(booking.check_out).toLocaleDateString() : 'N/A'}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                                ${(booking.status || '').toLowerCase() === 'confirmed' ? 'bg-green-100 text-green-800' : 
+                                                  (booking.status || '').toLowerCase() === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                                  'bg-gray-100 text-gray-800'}">
+                                                ${booking.status || 'Unknown'}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                `).join('');
+                            }
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                const errorHtml = `
+                    <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-red-700">
+                                    Failed to load dashboard data. Please try again later.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                const header = document.querySelector('.border-b');
+                if (header && header.nextElementSibling) {
+                    header.insertAdjacentHTML('afterend', errorHtml);
+                }
+            }
+        }
+        
+        // Load bookings for the bookings tab
+        async function loadBookings() {
+            try {
+                const container = document.getElementById('bookingsTable');
+                const recentContainer = document.getElementById('recentBookingsTable');
+                
+                if (!container || !recentContainer) {
+                    throw new Error('Bookings container not found');
+                }
+                
+                // Show loading state
+                container.innerHTML = '<p class="text-gray-500">Loading bookings...</p>';
+                
+                // Fetch all bookings
+                const bookings = await fetchBookings();
+                
+                // Update recent bookings (first 5)
+                if (recentContainer) {
+                    const recentBookings = bookings.slice(0, 5);
+                    recentContainer.innerHTML = `
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Guest</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Room</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Check-in</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Check-out</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    ${recentBookings.length > 0 ? 
+                                        recentBookings.map(booking => `
+                                            <tr>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${booking.id}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${booking.guest_name || 'N/A'}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${booking.room_number || 'N/A'}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${new Date(booking.check_in).toLocaleDateString()}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${new Date(booking.check_out).toLocaleDateString()}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                        ${booking.status || 'Confirmed'}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        `).join('') : 
+                                        '<tr><td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">No recent bookings found</td></tr>'
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                }
+                
+                // Update all bookings
+                container.innerHTML = renderBookings(bookings);
+                
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+                const container = document.getElementById('bookingsTable');
+                if (container) {
+                    container.innerHTML = renderError();
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 });
 
-//the public or the routes that dont need authentication
+//the public or the routes that don't need authentication
 Route::get('/rooms', [\App\Http\Controllers\Api\RoomController::class, 'index']);
 Route::get('/rooms/{id}', [\App\Http\Controllers\Api\RoomController::class, 'show']);
 Route::post('/booking', [\App\Http\Controllers\Api\BookingController::class, 'store']);

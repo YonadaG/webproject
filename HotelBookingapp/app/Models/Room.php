@@ -16,16 +16,15 @@ class Room extends Model
         'features',
         'price_perNight',
         'image'
-
     ];
 
     protected $appends=[
-      'cover_image_url'
+      'image_url'
     ];
 
-    public function getCoverImageUrlAttribute(): ?string
+    public function getImageUrlAttribute(): ?string
     {
-        return $this->cover_image ? Storage::url($this->cover_image) : null;
+        return $this->image ? Storage::url($this->image) : null;
     }
 
 }

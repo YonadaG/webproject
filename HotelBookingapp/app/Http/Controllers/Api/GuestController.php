@@ -12,11 +12,12 @@ class GuestController extends Controller
 {
     public function  index(): \Illuminate\Database\Eloquent\Collection
     {
-        return Guest::all();
+       $guests = Guest::all();
+        return response()->json($guests, 200);
     }
     public function show($id): \Illuminate\Database\Eloquent\Collection
     {
-        return Guest::findOrFail($id);
+        return response()->json(Guest::findOrFail($id), 200);
 
     }
     public function store(Request $request){

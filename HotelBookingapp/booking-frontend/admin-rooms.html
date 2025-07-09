@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Rooms - Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="src/style.css">
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center border-b border-gray-200 pb-6 mb-8">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">Room Management</h1>
+                <p class="text-sm text-gray-500" id="welcomeMessage">Manage hotel rooms and availability</p>
+            </div>
+            <div class="flex space-x-4">
+                <a href="admin-dashboard.html" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <i class="fas fa-arrow-left mr-2"></i> Back to Dashboard
+                </a>
+                <button id="logoutBtn" 
+                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    Logout
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+            <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Rooms</h3>
+                    <button id="addRoomBtn" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <i class="fas fa-plus mr-2"></i> Add New Room
+                    </button>
+                </div>
+            </div>
+            <div id="roomList" class="p-4">
+                <p class="text-gray-500">Loading rooms...</p>
+            </div>
+        </div>
+
+        <!-- Room Form Modal -->
+        <div id="roomFormModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+            <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-2/3 lg:w-1/2 shadow-lg rounded-md bg-white">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <h3 class="text-xl font-semibold text-gray-900" id="modalTitle">Add New Room</h3>
+                    <button id="closeModalBtn" class="text-gray-400 hover:text-gray-500">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                <div id="roomFormContainer" class="mt-4">
+                    <!-- Room form will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { isAuthenticated, logout, getCurrentUser, showAlert } from './src/api.js';
+        import { initRoomManagement } from './src/room_management.js';
+
+        // Check authentication
+        async function checkAuth() {
+            const authStatus = await isAuthenticated();
+            const user = getCurrentUser();
+            
+            if (!authStatus || !user) {
+                window.location.href = 'admin-login.html';
+                return false;
+            }
+            
+            // Update welcome message
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            if (welcomeMessage) {
+                welcomeMessage.textContent = `Welcome, ${user.name || 'Admin'}!`;
+            }
+            
+            return true;
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', async () => {
+            const isAuth = await checkAuth();
+            if (!isAuth) return;
+
+            // Initialize room management
+            initRoomManagement();
+
+            // Set up logout button
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    try {
+                        await logout();
+                        window.location.href = 'admin-login.html';
+                    } catch (error) {
+                        console.error('Logout failed:', error);
+                        showAlert('Logout failed. Please try again.', 'error');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -12,7 +12,7 @@ class BookingController extends Controller
 {
 
     public function index(){
-        Booking::all();
+        return response()->json(Booking::all(), 200);
     }
     public function store(Request $request)
     {

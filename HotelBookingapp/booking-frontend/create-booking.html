@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Booking - Hotel Booking</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen flex items-center justify-center px-4">
+        <div class="w-full max-w-2xl">
+            <div class="bg-white rounded-lg shadow-md p-8">
+                <h1 class="text-2xl font-bold text-gray-800 mb-6">Complete Your Booking</h1>
+                
+                <div id="errorContainer" class="mb-6"></div>
+                
+                <form id="createBookingForm" class="space-y-6" novalidate>
+                    <!-- Hidden fields for form submission -->
+                    <input type="hidden" id="room_id" name="room_id">
+                    <input type="hidden" id="guest_id" name="guest_id">
+                    
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                        <!-- Room ID (read-only) -->
+                        <div class="sm:col-span-3">
+                            <label for="room_id_display" class="block text-sm font-medium text-gray-700">Room Number</label>
+                            <input type="text" id="room_id_display" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-100" readonly>
+                        </div>
+                        
+                        <!-- Room Info Display -->
+                        <div class="sm:col-span-6">
+                            <p class="text-sm text-gray-500">The price will be calculated based on the selected dates and room type.</p>
+                        </div>
+                        
+                        <!-- Check-in Date -->
+                        <div class="sm:col-span-3">
+                            <label for="check_in_date" class="block text-sm font-medium text-gray-700">Check-in Date *</label>
+                            <div class="mt-1 relative">
+                                <input type="date" id="check_in_date" name="check_in_date" required
+                                       class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                       min="">
+                                <p class="mt-1 text-xs text-gray-500">Select check-in date</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Check-out Date -->
+                        <div class="sm:col-span-3">
+                            <label for="check_out_date" class="block text-sm font-medium text-gray-700">Check-out Date *</label>
+                            <div class="mt-1 relative">
+                                <input type="date" id="check_out_date" name="check_out_date" required disabled
+                                       class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-50"
+                                       min="">
+                                <p class="mt-1 text-xs text-gray-500">Select check-in date first</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Number of Guests -->
+                        <div class="sm:col-span-3">
+                            <label for="number_of_guests" class="block text-sm font-medium text-gray-700">Number of Guests *</label>
+                            <div class="mt-1 relative">
+                                <input type="number" id="number_of_guests" name="number_of_guests" min="1" required
+                                       class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <p class="mt-1 text-xs text-gray-500">Minimum: 1 guest</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-4 pt-4">
+                        <a href="index.html" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Cancel
+                        </a>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <span class="flex items-center">
+                                <span>Complete Booking</span>
+                                <svg class="hidden animate-spin -mr-1 ml-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include the create_booking script as a module -->
+    <script type="module" src="src/create_booking.js"></script>
+</body>
+</html>

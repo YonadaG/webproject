@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Book your perfect hotel stay with our modern booking platform. Find the best rooms at competitive prices with instant confirmation.">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="theme-color" content="#1a365d">
+    <meta property="og:title" content="HotelBooking - Find Your Perfect Stay">
+    <meta property="og:description" content="Discover and book the best hotel rooms with our easy-to-use booking platform.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <title>HotelBooking | Find Your Perfect Stay</title>
+  </head>
+  <body class="font-sans antialiased text-gray-800 bg-white">
+    <!-- Skip to main content for better accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:ring-2 focus:ring-blue-600 focus:rounded">
+      Skip to main content
+    </a>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <a href="/" class="text-xl font-bold text-blue-700">HotelBooking</a>
+          </div>
+          
+          <!-- Desktop Navigation -->
+          <div class="hidden md:flex items-center space-x-8">
+            <a href="#" class="text-gray-700 hover:text-blue-600 px-3 py-2 font-medium transition-colors">Home</a>
+            <a href="#" class="text-gray-700 hover:text-blue-600 px-3 py-2 font-medium transition-colors">Rooms</a>
+            <a href="#" class="text-gray-700 hover:text-blue-600 px-3 py-2 font-medium transition-colors">Amenities</a>
+            <a href="#" class="text-gray-700 hover:text-blue-600 px-3 py-2 font-medium transition-colors">Contact</a>
+            <a href="#" class="ml-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+              Book Now
+            </a>
+          </div>
+
+          <!-- Mobile menu button -->
+          <div class="md:hidden flex items-center">
+            <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500" aria-controls="mobile-menu" aria-expanded="false">
+              <span class="sr-only">Open main menu</span>
+              <!-- Menu icon (hamburger) -->
+              <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile menu, show/hide based on menu state -->
+      <div class="md:hidden hidden" id="mobile-menu">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Home</a>
+          <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Rooms</a>
+          <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Amenities</a>
+          <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Contact</a>
+          <a href="#" class="block w-full text-center px-4 py-2 mt-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+            Book Now
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <main id="main-content">
+      <!-- Hero Section -->
+      <section class="relative bg-gradient-to-r from-blue-900 to-blue-700 text-white py-24 md:py-36">
+        <!-- Background image with overlay -->
+        <div class="absolute inset-0 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
+               alt="Luxury hotel lobby" 
+               class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-black opacity-50"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div class="text-center max-w-4xl mx-auto px-4">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">Welcome to Serenity Bay</h1>
+            <p class="text-xl md:text-2xl mb-12 text-blue-100">Experience Unmatched Luxury on the Shores of the Mediterranean</p>
+            
+            <!-- Call to Action Buttons -->
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+              <a href="#rooms" class="inline-block bg-white text-blue-700 hover:bg-blue-50 font-bold py-4 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">
+                View Our Rooms
+              </a>
+              <a href="#contact" class="inline-block bg-transparent border-2 border-white text-white hover:bg-white hover:bg-opacity-10 font-bold py-4 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">
+                Contact Us
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Rooms Section -->
+      <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900">Our Rooms</h2>
+            <p class="mt-4 text-xl text-gray-600">Experience comfort and luxury in our carefully designed rooms</p>
+          </div>
+          
+          <!-- Rooms Grid -->
+          <div id="rooms-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Loading Skeleton -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+              <div class="animate-pulse">
+                <div class="h-48 bg-gray-200"></div>
+                <div class="p-6">
+                  <div class="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+                  <div class="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
+                  <div class="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
+                  <div class="h-10 bg-gray-200 rounded w-full"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Repeat skeleton for loading state -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden md:block hidden">
+              <div class="animate-pulse">
+                <div class="h-48 bg-gray-200"></div>
+                <div class="p-6">
+                  <div class="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+                  <div class="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
+                  <div class="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
+                  <div class="h-10 bg-gray-200 rounded w-full"></div>
+                </div>
+              </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md overflow-hidden lg:block hidden">
+              <div class="animate-pulse">
+                <div class="h-48 bg-gray-200"></div>
+                <div class="p-6">
+                  <div class="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+                  <div class="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
+                  <div class="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
+                  <div class="h-10 bg-gray-200 rounded w-full"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white pt-12 pb-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div class="col-span-1">
+            <h3 class="text-lg font-semibold mb-4">HotelBooking</h3>
+            <p class="text-gray-400">Your trusted partner in finding the perfect accommodation for your travels.</p>
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-4">Company</h4>
+            <ul class="space-y-2">
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Careers</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Press</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Blog</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-4">Support</h4>
+            <ul class="space-y-2">
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Safety Information</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Cancellation Options</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-4">Legal</h4>
+            <ul class="space-y-2">
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Cookie Policy</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="mt-12 pt-8 border-t border-gray-700">
+          <p class="text-center text-gray-400 text-sm">&copy; 2025 HotelBooking. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="/src/GuestForm.js"></script>
+    <script type="module" src="/src/BookingForm.js"></script>
+    <script type="module" src="/src/main.js"></script>
+    <script>
+      // Mobile menu toggle functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuButton = document.querySelector('[aria-controls="mobile-menu"]');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileMenuButton && mobileMenu) {
+          mobileMenuButton.addEventListener('click', function() {
+            const expanded = this.getAttribute('aria-expanded') === 'true' || false;
+            this.setAttribute('aria-expanded', !expanded);
+            mobileMenu.classList.toggle('hidden');
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
